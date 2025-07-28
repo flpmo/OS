@@ -42,7 +42,7 @@ def gerar_pdf(dados):
     # Cliente e Veículo
     pdf.cell(0, 10, f"Cliente: {dados['nome']}  |  Tel: {dados['telefone']}", ln=True)
     pdf.cell(0, 10, f"Veículo: {dados['veiculo']}  |  Placa: {dados['placa']}  |  KM: {dados['km']}", ln=True)
-    pdf.cell(0, 10, f"Entrada: {dados['entrada']}  |  Saída: {dados['saida']}  |  Garantia: {dados['garantia']}", ln=True)
+    pdf.cell(0, 10, f"Entrada: {dados['data_entrada']}  |  Saída: {dados['data_saida']}  |  Garantia: {dados['garantia']}", ln=True)
 
     pdf.ln(5)
     if dados["observacoes"]:
@@ -56,14 +56,24 @@ def gerar_pdf(dados):
     pdf.set_font("Arial", "", 12)
     total = 0
     for desc, preco in dados["pecas"]:
+        try:
+            preco_float = float(preco)
+        except (ValueError, TypeError):
+            preco_float = 0.0  # ou outro valor padrão ou erro
+
         pdf.cell(140, 10, desc, border=1)
-        pdf.cell(40, 10, f"{preco:.2f}", border=1, ln=True)
-        total += preco
+        pdf.cell(40, 10, f"{preco_float:.2f}", border=1, ln=True)
+        total += preco_float
 
     # Mão de obra
     pdf.cell(140, 10, "Mão de obra", border=1)
-    pdf.cell(40, 10, f"{dados['mao_obra']:.2f}", border=1, ln=True)
-    total += dados["mao_obra"]
+    try:
+        mao_obra_val = float(dados.get('mao_obra', 0))
+    except (ValueError, TypeError):
+        mao_obra_val = 0.0
+
+    pdf.cell(40, 10, f"{mao_obra_val:.2f}", border=1, ln=True)
+    total += mao_obra_val
 
     # Total
     pdf.set_font("Arial", "B", 12)

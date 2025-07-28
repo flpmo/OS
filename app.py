@@ -48,22 +48,29 @@ with st.form("os_form"):
 
     gerar = st.form_submit_button("📥 Gerar PDF")
 
-    if gerar:
-        data = {
-            "nome": nome,
-            "telefone": telefone,
-            "veiculo": veiculo,
-            "placa": placa,
-            "km": km,
-            "data_entrada": data_entrada.strftime("%d/%m/%Y"),
-            "data_saida": data_saida.strftime("%d/%m/%Y"),
-            "garantia": garantia,
-            "pecas": pecas,
-            "mao_obra": mao_obra,
-            "preco_total": preco_total,
-            "observacoes": observacoes
-        }
+# Fim do form
 
-        pdf_path = gerar_pdf(data)
-        with open(pdf_path, "rb") as f:
-            st.download_button("📄 Baixar PDF", f, file_name=os.path.basename(pdf_path), mime="application/pdf")
+if gerar:
+    data = {
+        "nome": nome,
+        "telefone": telefone,
+        "veiculo": veiculo,
+        "placa": placa,
+        "km": km,
+        "data_entrada": data_entrada.strftime("%d/%m/%Y"),
+        "data_saida": data_saida.strftime("%d/%m/%Y"),
+        "garantia": garantia,
+        "pecas": pecas,
+        "mao_obra": mao_obra,
+        "preco_total": preco_total,
+        "observacoes": observacoes
+    }
+
+    pdf_path = gerar_pdf(data)
+    with open(pdf_path, "rb") as f:
+        st.download_button(
+            label="📄 Baixar PDF",
+            data=f,
+            file_name=os.path.basename(pdf_path),
+            mime="application/pdf"
+        )
