@@ -11,6 +11,10 @@ st.title("📄 Gerador de Ordem de Serviço")
 if "num_pecas" not in st.session_state:
     st.session_state.num_pecas = 1
 
+# Inicializa o caminho do PDF na sessão
+if "pdf_path" not in st.session_state:
+    st.session_state.pdf_path = None
+
 with st.form("os_form"):
 
     st.header("🔧 Dados do cliente e veículo")
@@ -21,7 +25,7 @@ with st.form("os_form"):
     km = st.text_input("KM")
     data_entrada = st.date_input("Data de Entrada", value=datetime.today())
     data_saida = st.date_input("Data de Saída", value=datetime.today())
-    garantia = st.text_input("Garantia")
+    garantia = st.date_input("Garantia", value=datetime.today())
 
     st.header("🧾 Peças Utilizadas")
 
@@ -48,8 +52,7 @@ with st.form("os_form"):
 
     gerar = st.form_submit_button("📥 Gerar PDF")
 
-# Fim do form
-
+# Fora do form: processar geração e mostrar botão de download
 if gerar:
     data = {
         "nome": nome,
@@ -67,10 +70,14 @@ if gerar:
     }
 
     pdf_path = gerar_pdf(data)
-    with open(pdf_path, "rb") as f:
+    st.session_state.pdf_path = pdf_path
+
+# Exibir botão de download, se PDF tiver sido gerado
+if st.session_state.pdf_path and os.path.exists(st.session_state.pdf_path):
+    with open(st.session_state.pdf_path, "rb") as f:
         st.download_button(
             label="📄 Baixar PDF",
             data=f,
-            file_name=os.path.basename(pdf_path),
+            file_name=os.path.basename(st.session_state.pdf_path),
             mime="application/pdf"
         )

@@ -55,20 +55,23 @@ def gerar_pdf(dados):
     pdf.cell(40, 10, "Preço (R$)", border=1, ln=True)
     pdf.set_font("Arial", "", 12)
     total = 0
-    for desc, preco in dados["pecas"]:
+    for peca in dados["pecas"]:
+        descricao = peca.get("descricao", "").strip()
+        preco = float(peca.get("preco", 0))
         try:
-            preco_float = float(preco)
+            preco_float = float(peca['preco'])
         except (ValueError, TypeError):
             preco_float = 0.0  # ou outro valor padrão ou erro
 
-        pdf.cell(140, 10, desc, border=1)
+        pdf.cell(140, 10, descricao, border=1)
         pdf.cell(40, 10, f"{preco_float:.2f}", border=1, ln=True)
         total += preco_float
 
     # Mão de obra
-    pdf.cell(140, 10, "Mão de obra", border=1)
+    pdf.cell(140, 10, f"Mão de obra: {dados['mao_obra']}", border=1)
+
     try:
-        mao_obra_val = float(dados.get('mao_obra', 0))
+        mao_obra_val = float(dados.get('preco_total', 0))
     except (ValueError, TypeError):
         mao_obra_val = 0.0
 
