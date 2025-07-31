@@ -4,12 +4,17 @@ import os
 
 class PDF(FPDF):
     def header(self):
+        data = self.formatar_data()
+        self.set_font("Arial", "I", 8)
+        #self.set_text_color(100)
+        self.cell(0, 5, f"São Paulo, {data}    ", ln=True, align="R")
+
         if os.path.exists("nf.png"):
             self.image("nf.png", 10, 8, 33)
         self.set_font("Arial", "B", 14)
         self.cell(0, 10, "NF Auto Service - Ordem de Serviço", ln=True, align="C")
         self.set_font("Arial", "", 9)
-        self.cell(0, 8, "R. Rafael da Silva e Sousa, 470 - Cidade Líder", ln=True, align="C")
+        self.cell(0, 5, "R. Rafael da Silva e Sousa, 470 - Cidade Líder", ln=True, align="C")
         self.cell(0, 5, "São Paulo - SP, 08280-090", ln=True, align="C")
         self.ln(10)
 
@@ -17,7 +22,16 @@ class PDF(FPDF):
         self.set_y(-15)
         self.set_font("Arial", "I", 8)
         self.set_text_color(100)
-        self.cell(0, 10, "Instagram: @nf.autoservice_  |  https://www.instagram.com/nf.autoservice_/", align="C")
+        self.cell(0, 10, "NF Auto Service  |  Instagram: @nf.autoservice_  |  Tel: (11) 2746-1887  |  Whatsapp: (11) 94747-8952  ", align="C")
+        
+    def formatar_data(self):
+        meses = {
+            1: "janeiro", 2: "fevereiro", 3: "março", 4: "abril",
+            5: "maio", 6: "junho", 7: "julho", 8: "agosto",
+            9: "setembro", 10: "outubro", 11: "novembro", 12: "dezembro"
+        }
+        hoje = datetime.now()
+        return f"{hoje.day} de {meses[hoje.month]} de {hoje.year}"
 
 def gerar_pdf(dados):
     # ID incremental
@@ -27,12 +41,12 @@ def gerar_pdf(dados):
             last_id = int(f.read().strip())
     else:
         last_id = 0
-    new_id = last_id + 1
+    new_id = str(last_id + 1).zfill(3)
     with open(id_path, "w") as f:
         f.write(str(new_id))
 
     data = datetime.now().strftime("%Y%m%d")
-    filename = f"OS_{new_id}_{data}.pdf"
+    filename = f"OS__{data}_{new_id}.pdf"
 
     pdf = PDF()
     pdf.add_page()
@@ -85,8 +99,13 @@ def gerar_pdf(dados):
 
     # Contato final
     pdf.ln(10)
-    pdf.set_font("Arial", "", 11)
-    pdf.multi_cell(0, 8, "NF Auto Service\nTel: (11) 2746-1887")
+    pdf.set_font("Arial", "", 10)
+    
+    pdf.multi_cell(180, 6, "Condições de Garantia: A garantia só terá validade, desde que sejam feitas as revisões pré agendadas por esta oficina. A gantia perderá a validade se costatada qualquer manutenção feita por outro profissional que não seja desta oficina. É de responsabilidade do próprietário informar qualquer anormalidade do serviço, após ser executado. Havendo decisão do proprietário de prosseguir ou postergar os reparos ou danos apresentados posteriormente, o mesmo assume a responsabilidade e perda da garantia. Não há garantia para peça fornecida pelo cliente.\n\n");
+    pdf.set_font("Arial", "B", 14)
+    pdf.multi_cell(0, 6, "NF Auto Service")
+    pdf.set_font("Arial", "", 10)
+    pdf.multi_cell(0, 6, "Tel: (11) 2746-1887")
     pdf.cell(0, 6, "Whatsapp: (11) 94747-8952", ln=1, link="https://wa.me/5511947478952")
     pdf.cell(0, 6, "Instagram: @nf.autoservice_", ln=1, link="https://www.instagram.com/nf.autoservice_/")
 
