@@ -46,7 +46,7 @@ def gerar_pdf(dados):
         f.write(str(new_id))
 
     data = datetime.now().strftime("%Y%m%d")
-    filename = f"OS__{data}_{new_id}.pdf"
+    filename = f"OS_{data}_{new_id}.pdf"
 
     pdf = PDF()
     pdf.add_page()
