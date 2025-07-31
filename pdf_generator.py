@@ -101,7 +101,7 @@ def gerar_pdf(dados):
     pdf.ln(10)
     pdf.set_font("Arial", "", 10)
     
-    pdf.multi_cell(180, 6, "Condições de Garantia: A garantia só terá validade, desde que sejam feitas as revisões pré agendadas por esta oficina. A gantia perderá a validade se costatada qualquer manutenção feita por outro profissional que não seja desta oficina. É de responsabilidade do próprietário informar qualquer anormalidade do serviço, após ser executado. Havendo decisão do proprietário de prosseguir ou postergar os reparos ou danos apresentados posteriormente, o mesmo assume a responsabilidade e perda da garantia. Não há garantia para peça fornecida pelo cliente.\n\n");
+    pdf.multi_cell(180, 6, "Condições de Garantia: A garantia só terá validade, desde que sejam feitas as revisões pré-agendadas por esta oficina. A garantia perderá a validade se costatada qualquer manutenção feita por outro profissional que não seja desta oficina. É de responsabilidade do próprietário informar qualquer anormalidade do serviço, após ser executado. Havendo decisão do proprietário de prosseguir ou postergar os reparos ou danos apresentados posteriormente, o mesmo assume a responsabilidade e perda da garantia. Não há garantia para peça fornecida pelo cliente.\n\n");
     pdf.set_font("Arial", "B", 14)
     pdf.multi_cell(0, 6, "NF Auto Service")
     pdf.set_font("Arial", "", 10)
